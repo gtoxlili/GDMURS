@@ -114,7 +114,7 @@
         <v-card-text>请稍等片刻后</br>通过软件根目录获取试卷</v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="green darken-1" flat @click="shengcshij()">agree</v-btn>
+          <v-btn color="green darken-1" flat @click="shengcshij1()">agree</v-btn>
           </v-card-actions>
           <v-card-actions>
           <v-spacer></v-spacer>
@@ -252,6 +252,47 @@
         </v-card>
       </v-dialog>
 
+<template>
+  <v-layout row justify-center>
+    <v-dialog v-model="dialogxwxwxw" scrollable max-width="400px">
+      <v-card>
+        <v-card-title>请选择考试场次</v-card-title>
+        <v-divider></v-divider>
+        <v-card-text style="height: 300px;">
+          <v-radio-group v-model="dialogm1" column>
+            <v-radio v-for="(item, index) in zwbzl" color="#007655" :label="item.keyname+'('+item.objectId+')'" :value="index"></v-radio>
+          </v-radio-group>
+        </v-card-text>
+        <v-divider></v-divider>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="green darken-1" flat="flat" @click="shengcshij2()">选择</v-btn>
+          <v-btn color="green darken-1" flat="flat" @click="dialogxwxwxw = false">取消</v-btn>
+        </v-card-actions>
+        
+      </v-card>
+    </v-dialog>
+  </v-layout>
+</template>
+
+<v-snackbar
+      v-model="snackbar"
+      color="#00081A"
+      bottom
+      multi-line
+  
+    >
+      试卷已生成完成！
+      <v-btn
+        dark
+        flat
+        color="pink"
+        @click="openfile()"
+      >
+        OPEN
+      </v-btn>
+    </v-snackbar>
+
 
 
   <floatbottom v-if="hover==true" v-on:childByValue="childByValue"></floatbottom>
@@ -271,6 +312,9 @@ const { shell } = require('electron')
   },
     data () {
       return {
+        snackbar:false,
+        dialogxwxwxw:false,
+        dialogm1:0,
         xaixtx:"全部",
         xaixnd:"全部",
         dengdai:false,
@@ -306,9 +350,10 @@ const { shell } = require('electron')
         "subtitle": "",
         "avatar": "",
         "dzsj": "",
-        "zqda": ""
+        "zqda": "",
     },
         yanse:{"选":"#db3a34","填":"#084c61","简":"#177e89"},
+        zwbzl:[],
         items: [
         ]
       }
@@ -476,36 +521,55 @@ const { shell } = require('electron')
           fs.writeFileSync(remote.app.getPath("home")+"/tiku/tiku.json", JSON.stringify(this.items), 'utf8');
         }
         this.close()
-      },shengcshij(){
-          this.dengdai=true
-          this.window=false
+      },shengcshij2(){
+          this.dialogxwxwxw=false
           var today = new Date();
           var xsxsxsxs=["A","B"]
+          this.dengdai=true
           this.dendaish="正在拉取题库..."
           var xsidzhen=this
+          var kaoshixx=this.zwbzl[this.dialogm1]
+          var kaoshixxxs=kaoshixx.ksheader
+          for (var dfdf=0;dfdf<kaoshixxxs.length;dfdf++){
+              kaoshixxxs[dfdf]=kaoshixxxs[dfdf].split("：")
+
+          }
+
           setTimeout(function(){
 var shijbf={"keyid":today.getFullYear().toString()+(today.getMonth().length==2?today.getMonth()+1:"0"+(today.getMonth()+1))+today.getDate().toString(),"daanbh":[[],[]]}
 
-for (var xsxsx=0;xsxsx<2;xsxsx++){
+
           
-         
+
           
           let resulxst = fs.readFileSync(remote.app.getPath("home")+"/tiku/st.htm")
           var daichuli=iconv.decode(resulxst, 'gbk').split("zhelichatiaaaaaaaaaaaaaaa")
-          daichuli[0]=daichuli[0]+xsxsxsxs[xsxsx]+"("+shijbf.keyid+")"
+          var daichulifb=daichuli
+          daichuli[0]=daichuli[0]+kaoshixxxs[1][1]
+          daichuli[1]=daichuli[1]+kaoshixxxs[3][1]
+          daichuli[3]=daichuli[3]+kaoshixxxs[5][1]
+          daichuli[4]=daichuli[4]+kaoshixxxs[4][1]
+          daichuli[5]=daichuli[5]+shijbf.keyid
+          daichuli[6]=daichuli[6]+kaoshixx.objectId
+          
+for (var xsxsx=0;xsxsx<2;xsxsx++){          
+          daichuli[2]=daichuli[2]+xsxsxsxs[xsxsx]
+
+
+
           xsidzhen.shaixuan("填")
           
           var daixhtk=xsidzhen.luanxu(xsidzhen.items)
           for (var i=0;i<daixhtk.length;i++){
                   shijbf.daanbh[xsxsx].push(daixhtk[i].title)
-                  daichuli[1]=daichuli[1]+`<p class=MsoNormal style='line-height:150%'><span lang=EN-US style='font-family:宋体'>`+(i+1)+`</span><span style='font-family:宋体'>、`+daixhtk[i].subtitle+`</span></p>`
+                  daichuli[7]=daichuli[7]+`<p class=MsoNormal style='line-height:150%'><span lang=EN-US style='font-family:宋体'>`+(i+1)+`</span><span style='font-family:宋体'>、`+daixhtk[i].subtitle+`</span></p>`
           }
           xsidzhen.shaixuan("选")
           
           daixhtk=xsidzhen.luanxu(xsidzhen.items)
           for (var i=0;i<daixhtk.length;i++){
             shijbf.daanbh[xsxsx].push(daixhtk[i].title)
-                  daichuli[2]=daichuli[2]+`<p class=MsoNormal style='line-height:150%'><span lang=EN-US style='line-height:
+                  daichuli[8]=daichuli[8]+`<p class=MsoNormal style='line-height:150%'><span lang=EN-US style='line-height:
 150%;font-family:宋体;letter-spacing:.25pt'>(&nbsp;&nbsp; )`+(i+1)+`.</span><span
 lang=EN-US> </span><span style='line-height:150%;font-family:宋体;letter-spacing:
 .25pt'>`+daixhtk[i].subtitle+`</span></p>
@@ -532,7 +596,7 @@ style='line-height:150%;font-family:宋体;letter-spacing:.25pt'>`+daixhtk[i].da
           daixhtk=xsidzhen.luanxu(xsidzhen.items)
           for (var i=0;i<4;i++){
             shijbf.daanbh[xsxsx].push(daixhtk[i].title)
-                  daichuli[3]=daichuli[3]+`<p class=MsoNormal style='line-height:150%'><span lang=EN-US style='font-family:
+                  daichuli[9]=daichuli[9]+`<p class=MsoNormal style='line-height:150%'><span lang=EN-US style='font-family:
 宋体'>`+(i+1)+`</span><span style='font-family:宋体'>、`+daixhtk[i].subtitle+`（<span
 lang=EN-US>10</span>分）</span></p>
 
@@ -547,7 +611,7 @@ lang=EN-US style='font-size:10.5pt'>&nbsp;</span></p>`
           }
           
           fs.writeFileSync(remote.app.getPath("home")+"/tiku/shijuan/"+xsxsxsxs[xsxsx]+"卷.html", iconv.encode(daichuli.join(""), 'gbk'));
-          
+         daichuli =daichulifb
 }
 xsidzhen.dendaish="正在上传试卷..."
 xsidzhen.$http({
@@ -563,7 +627,7 @@ xsidzhen.$http({
           console.log(body)
           xsidzhen.dengdai=false
 xsidzhen.shaixuan("全部")
-shell.showItemInFolder(remote.app.getPath("home")+"/tiku/shijuan/A卷.html")
+xsidzhen.snackbar=true
      });
 
 
@@ -572,6 +636,30 @@ shell.showItemInFolder(remote.app.getPath("home")+"/tiku/shijuan/A卷.html")
 
 },3000)
 
+      },shengcshij1(){
+          this.dengdai=true
+          this.dendaish="正在拉取考试信息..."
+          this.window=false
+          var zhendezhen=this
+          this.$http({
+          method: 'GET',
+          url: 'https://tfrtxk9h.api.lncld.net/1.1/scan/classes/Zwbbf',
+          headers: {
+               "X-LC-Key": "R7K4cue4IA76BnSE6oNtCPfW,master",
+               "X-LC-Id": "TfRTxk9HAm2hlkwORYJ6hrKt-gzGzoHsz",
+          }
+     }, function (err, res, body) {
+          var body=JSON.parse(body).results
+          console.log(body)
+          zhendezhen.dengdai=false
+           zhendezhen.zwbzl=body
+           zhendezhen.dialogxwxwxw=true
+     });
+
+      },openfile(){
+
+          shell.openItem(remote.app.getPath("home")+"/tiku/shijuan/A卷.html")
+          
       }
 
 

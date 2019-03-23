@@ -226,7 +226,7 @@
 
 <v-snackbar
       v-model="snackbar"
-      color=error
+      color="error"
       bottom
       multi-line
   
@@ -235,6 +235,7 @@
       <v-btn
         dark
         flat
+        color="pink"
         @click="snackbar = false"
       >
         Close

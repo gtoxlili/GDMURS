@@ -60,7 +60,8 @@
 </template>
         </v-flex>
        <v-flex xs12 class="mt-1 ml-3">
-        <v-btn class="mt-0" color="primary" dark @click="sczuoweibyp()">生成座位表样品</v-btn>
+        <v-btn class="mt-0" color="primary" :disabled="zuoweibxx[0]==''" dark @click="sczuoweibyp()">生成座位表样品</v-btn>
+
           <v-btn class="mt-3" :disabled="!havefb" color="primary" dark @click="window=true">生成座位表成品</v-btn>
          </v-flex>
       </v-layout>
@@ -195,10 +196,15 @@
     <v-dialog v-model="window" max-width="290">
       <v-card>
         <v-card-title class="headline">确定生成座位表</v-card-title>
-        <v-card-text>请稍等片刻后</br>座位表将保存于您的桌面</v-card-text>
+        <v-flex xs12 sm8 offset-md1>
+          <v-text-field flat v-model="zuoweibminz" clearable hint="名字请尽量特征化"
+            label="座位表名称"
+          ></v-text-field>
+        </v-flex>
+        
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="green darken-1" flat @click=" sczuoweicp() ">agree</v-btn>
+          <v-btn color="green darken-1" :disabled="zuoweibminz==''" flat @click=" sczuoweicp() ">agree</v-btn>
           </v-card-actions>
           <v-card-actions>
           <v-spacer></v-spacer>
@@ -233,15 +239,38 @@
   </div>
 </template>
     </v-flex>
+
+<v-snackbar
+      v-model="snackbar"
+      color="#00081A"
+      bottom
+      multi-line
+  
+    >
+      {{ snackbartext }}
+      <v-btn
+        dark
+        flat
+        color="pink"
+        @click="openfile()"
+      >
+        OPEN
+      </v-btn>
+    </v-snackbar>
+
   </v-layout>
 </template>
 
 <script>
 import { remote } from 'electron';
 import Excel from 'exceljs';
+const { shell } = require('electron')
   export default {
     data () {
       return {
+        snackbartext:"",
+        snackbar:false,
+        zuoweibminz:"",
         zuoweibxx:["","","","","",""],
         dialog: false,
         pagination:{
@@ -258,7 +287,7 @@ import Excel from 'exceljs';
         { text: '座位号', value: 'protein' },
         { text: 'Actions', value: 'name', sortable: false }
       ],
-      desserts: [],
+      desserts: [{}],
       editedIndex: -1,
       editedItem: {
         name: '',
@@ -354,7 +383,33 @@ import Excel from 'exceljs';
               }
           workbook.xlsx.writeFile(remote.app.getPath("desktop")+"/座位表.xlsx")//将workbook生成文件
               .then(function() {
-                zhendsss.dengdai=false
+
+    
+
+          zhendsss.$http({
+          method: 'POST',
+          url: 'https://tfrtxk9h.api.lncld.net/1.1/classes/Zwbbf',
+          json: true,
+          headers: {
+               "Content-Type": "application/json",
+               "X-LC-Key": "v9KAOdcB6gaFH5nsTOgBgEds",
+               "X-LC-Id": "TfRTxk9HAm2hlkwORYJ6hrKt-gzGzoHsz",
+          }, body: {
+               "keyname":zhendsss.zuoweibminz,"zuoweib":zhendsss.desserts,"ksheader":zhendsss.exevls
+          }
+     }, function (err, res, body) {
+          console.log(body)
+          zhendsss.snackbar=true
+          zhendsss.snackbartext="座位表特征码为："+body.objectId
+    zhendsss.dengdai=false
+
+     });
+
+
+
+
+
+                
               });
 
 
@@ -410,7 +465,7 @@ import Excel from 'exceljs';
 }).write()
 
 this.desserts = [{}]
-
+this.havefb = false
 
 }else{
   var gerenxx=this.$db.read().get('zuowei').value()[0]
@@ -449,6 +504,10 @@ this.desserts = [{}]
           this.desserts.push(this.editedItem)
         }
         this.close()
+      },openfile(){
+
+          shell.showItemInFolder(remote.app.getPath("desktop")+"/座位表.xlsx")
+          
       }
     }
   }
