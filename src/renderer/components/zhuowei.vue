@@ -506,7 +506,7 @@ this.havefb = false
         this.close()
       },openfile(){
 
-          shell.showItemInFolder(remote.app.getPath("desktop")+"/座位表.xlsx")
+          shell.openItem(remote.app.getPath("desktop")+"/座位表.xlsx")
           
       }
     }

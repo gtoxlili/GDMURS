@@ -658,7 +658,7 @@ xsidzhen.snackbar=true
 
       },openfile(){
 
-          shell.openItem(remote.app.getPath("home")+"/tiku/shijuan/A卷.html")
+          shell.showItemInFolder(remote.app.getPath("home")+"/tiku/shijuan/A卷.html")
           
       }
 
