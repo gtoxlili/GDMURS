@@ -26,6 +26,6 @@ This project was generated with [electron-vue](https://github.com/SimulatedGREG/
 
 #### 程序截图
 
-![Alt text](https://github.com/Glovecc/GDMURSDC/master/static/1.png)
-![Alt text](https://github.com/Glovecc/GDMURSDC/master/static/2.png)
-![Alt text](https://github.com/Glovecc/GDMURSDC/master/static/3.png)
+![Alt text](https://github.com/Glovecc/GDMURSDC/blob/master/static/1.png)
+![Alt text](https://github.com/Glovecc/GDMURSDC/blob/master/static/2.png)
+![Alt text](https://github.com/Glovecc/GDMURSDC/blob/master/static/3.png)
