@@ -42,7 +42,7 @@
 
           </v-radio-group>
         </v-flex>
-       <v-flex xs12 class="mt-2 ml-3">
+       <v-flex xs12 class="mt-2 ml-5">
         <v-btn class="mt-5"  :disabled="!hover" color="primary" dark @click="window=true">生成试卷</v-btn>
           
          </v-flex>
@@ -398,7 +398,7 @@ const { shell } = require('electron')
       huoqujson(){
         try{
           let result = JSON.parse(fs.readFileSync(remote.app.getPath("home")+"/tiku/tiku.json").toString().replace(/\s+/g,""))
-          this.items=result
+          this.items=result.reverse()
           }
         catch(err)
   {    
@@ -416,9 +416,9 @@ const { shell } = require('electron')
           xsdf.push(result[x])
         }
     }
-        this.items=xsdf}
+        this.items=xsdf.reverse()}
         else{
-          this.items=result
+          this.items=result.reverse()
         }
 
       },shaixuannd(xecs){
@@ -430,9 +430,9 @@ const { shell } = require('electron')
           xsdf.push(result[x])
         }
     }
-        this.items=xsdf}
+        this.items=xsdf.reverse()}
         else{
-          this.items=result
+          this.items=result.reverse()
         }
 
       }  ,childByValue: function (childValue) {
@@ -455,6 +455,7 @@ const { shell } = require('electron')
         this.dendaish="正在上传题库，请稍等。"
           var zhesthis=this
           this.dengdai=true
+          var xdnijia=this.items
           this.$http({
           method: 'PUT',
           url: 'https://tfrtxk9h.api.lncld.net/1.1/classes/Tiku/5c95fdea12215f0072551fe5',
@@ -465,7 +466,7 @@ const { shell } = require('electron')
                "Content-Type": "application/json"
           },
           body: {
-               "tiku":zhesthis.items
+               "tiku":xdnijia.reverse()
           }
      }, function (err, res, body) {
           console.log(body)
@@ -487,7 +488,7 @@ const { shell } = require('electron')
      }, function (err, res, body) {
           var body=JSON.parse(body).tiku
           fs.writeFileSync(remote.app.getPath("home")+"/tiku/tiku.json", JSON.stringify(body), 'utf8');
-          zhesthis.items=body
+          zhesthis.items=body.reverse()
           zhesthis.dengdai=false
      });
 
@@ -502,7 +503,8 @@ const { shell } = require('electron')
       },deleteItem (item) {
         const index = this.items.indexOf(item)
         confirm('Are you sure you want to delete this item?') && this.items.splice(index, 1)
-        fs.writeFileSync(remote.app.getPath("home")+"/tiku/tiku.json", JSON.stringify(this.items), 'utf8');
+        var xsidfg=this.items
+        fs.writeFileSync(remote.app.getPath("home")+"/tiku/tiku.json", JSON.stringify(xsidfg.reverse()), 'utf8');
       },close () {
         this.dialog = false
         setTimeout(() => {
@@ -516,9 +518,10 @@ const { shell } = require('electron')
           Object.assign(this.items[this.editedIndex], this.editedItem)
           fs.writeFileSync(remote.app.getPath("home")+"/tiku/tiku.json", JSON.stringify(this.items), 'utf8');
         } else {
-
-          this.items.push(this.editedItem)
-          fs.writeFileSync(remote.app.getPath("home")+"/tiku/tiku.json", JSON.stringify(this.items), 'utf8');
+          var xsdif=this.items
+          xsdif.reverse().push(this.editedItem)
+          fs.writeFileSync(remote.app.getPath("home")+"/tiku/tiku.json", JSON.stringify(xsdif), 'utf8');
+          this.items=xsdif.reverse()
         }
         this.close()
       },shengcshij2(){
@@ -543,16 +546,15 @@ var shijbf={"keyid":today.getFullYear().toString()+(today.getMonth().length==2?t
 
           
           let resulxst = fs.readFileSync(remote.app.getPath("home")+"/tiku/st.htm")
+          for (var xsxsx=0;xsxsx<2;xsxsx++){   
           var daichuli=iconv.decode(resulxst, 'gbk').split("zhelichatiaaaaaaaaaaaaaaa")
-          var daichulifb=daichuli
           daichuli[0]=daichuli[0]+kaoshixxxs[1][1]
           daichuli[1]=daichuli[1]+kaoshixxxs[3][1]
           daichuli[3]=daichuli[3]+kaoshixxxs[5][1]
           daichuli[4]=daichuli[4]+kaoshixxxs[4][1]
           daichuli[5]=daichuli[5]+shijbf.keyid
           daichuli[6]=daichuli[6]+kaoshixx.objectId
-          
-for (var xsxsx=0;xsxsx<2;xsxsx++){          
+          console.log(daichuli)     
           daichuli[2]=daichuli[2]+xsxsxsxs[xsxsx]
 
 
@@ -611,7 +613,6 @@ lang=EN-US style='font-size:10.5pt'>&nbsp;</span></p>`
           }
           
           fs.writeFileSync(remote.app.getPath("home")+"/tiku/shijuan/"+xsxsxsxs[xsxsx]+"卷.html", iconv.encode(daichuli.join(""), 'gbk'));
-         daichuli =daichulifb
 }
 xsidzhen.dendaish="正在上传试卷..."
 xsidzhen.$http({

@@ -59,11 +59,14 @@
   </v-form>
 </template>
         </v-flex>
-       <v-flex xs12 class="mt-1 ml-3">
+        
+       <v-flex xs12 class="mt-2 ml-3">
         <v-btn class="mt-0" color="primary" :disabled="zuoweibxx[0]==''" dark @click="sczuoweibyp()">生成座位表样品</v-btn>
 
           <v-btn class="mt-3" :disabled="!havefb" color="primary" dark @click="window=true">生成座位表成品</v-btn>
          </v-flex>
+
+         </br>
       </v-layout>
     </v-container>
 
