@@ -60,7 +60,7 @@
 </v-flex>
     <v-flex xs12 sm9>
      
-     </br>   </br> 
+
       <v-card disabled>
         <v-toolbar flat color="translate">
       <v-list>
@@ -70,21 +70,15 @@
           </v-list-tile-title>
         </v-list-tile>
       </v-list>
-    </v-toolbar><v-toolbar flat color="translate">
-      <v-list>
-        <v-list-tile>
-          <v-list-tile-title class="title">
-            
-          </v-list-tile-title>
-        </v-list-tile>
-      </v-list>
     </v-toolbar>
+    </br>
     <v-flex xs12 sm10 offset-sm1>
+      <v-card>
         <v-img
-          src="https://cdn.vuetifyjs.com/images/cards/desert.jpg"
-          aspect-ratio="2.75"
+          :src="domotu[muqian]"
+          
         ></v-img>
-      
+      </v-card>
         <v-card-title primary-title>
            <div>
             <h3 class="headline mb-0">{{muqiant[muqian]}}</h3>
@@ -92,24 +86,35 @@
           </v-card-title>
           
      
-            <v-subheader >答案</v-subheader>
-            <div class="text-xs-center"> 
-             
-          <v-chip label v-for="item in items">{{item}}、A</v-chip>
-       
-
-    
+            <v-subheader >参考答案</v-subheader>
+            <div class="text-xs-left"> 
+         
+          <v-chip v-if="muqian==0" label v-for="item in items">{{item}}、A</v-chip>
+          <v-chip v-if="muqian==1" label v-for="item in items">{{item}}、李白</v-chip>
+          <div  v-if="muqian>1">
+          <v-chip label >阁中帝子今何在？槛外长江空自流。</v-chip>
+            </br></br></br>
+          </div>
+            
               
                </div>
+               
         
         <v-subheader >批改</v-subheader>
        
     <v-layout row wrap>
-      <v-flex xs1 v-for="item in items">
+      <v-flex v-if="muqian<2" xs1 v-for="item in items">
           {{item}}
         <v-checkbox color="#ad002d" indeterminate></v-checkbox>
 
       </v-flex>
+      <v-flex v-if="muqian>=2" xs12 sm8 offset-sm2>
+        </br>
+          <v-text-field
+            counter="10"
+            label="本题得分"
+          ></v-text-field>
+        </v-flex>
     </v-layout>
 
         <v-flex xs12 sm4 offset-sm8>
@@ -117,12 +122,14 @@
           
           <v-btn flat color="#007f89">保存进度</v-btn>
           
-          <v-btn flat color="#181B39">下一组</v-btn>
+          <v-btn flat color="#181B39" @click="muqian<5?muqian+=1:muqian=0">下一组</v-btn>
         </v-card-actions>
             </v-flex>
           
 
         </v-flex>
+
+      </br></br>
       </v-card>
     
 
@@ -215,7 +222,13 @@ export default {
   data() {
     return {
       items:[1,2,3,4,5,6,7,8,9,10,11,12],
-      muqiant:["选择题","填空题","简答题"],
+      domotu:["https://s2.ax1x.com/2019/03/25/AthQjx.png",
+"https://s2.ax1x.com/2019/03/25/AthK3R.png",
+"https://s2.ax1x.com/2019/03/25/Athm4J.png",
+"https://s2.ax1x.com/2019/03/25/AtheN4.png",
+"https://s2.ax1x.com/2019/03/25/AthuC9.png",
+"https://s2.ax1x.com/2019/03/25/AthMg1.png"],
+      muqiant:["选择题","填空题","简答题1","简答题2","简答题3","简答题4"],
       muqiandan:"",
       muqian:0,
       ksyjxx:"开始阅卷",
