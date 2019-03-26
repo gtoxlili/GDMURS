@@ -44,7 +44,7 @@
         </v-flex></br></br>
        <v-flex xs12 class="mt-2 ml-5">
         <v-btn class="mt-5" color="primary" dark @click="showFileDialog()">选择试卷</v-btn>
-        <v-btn class="mt-5" color="primary" :disabled="shijuan==''||kaochang==''" dark @click="ksyjxx=ksyjxx=='开始阅卷'?'暂停阅卷':'开始阅卷',shifkaishiyj=!shifkaishiyj">{{ksyjxx}}</v-btn>
+        <v-btn class="mt-5" color="primary" :disabled="shijuan==''||kaochang==''" dark @click="kaishijuejuan()">{{ksyjxx}}</v-btn>
           
          </v-flex>
          </br></br></br>
@@ -71,7 +71,7 @@
         </v-list-tile>
       </v-list>
     </v-toolbar>
-    </br>
+    
     <v-flex xs12 sm10 offset-sm1>
       <v-card-title primary-title>
            <div>
@@ -81,7 +81,6 @@
       <v-card>
         <v-img
           :src="domotu[muqian]"
-          
         ></v-img>
       </v-card>
         
@@ -90,40 +89,41 @@
             <v-subheader >参考答案</v-subheader>
             <div class="text-xs-left"> 
          
-          <v-chip v-if="muqian==0" label v-for="item in items">{{item}}、A</v-chip>
-          <v-chip v-if="muqian==1" label v-for="item in items">{{item}}、李白</v-chip>
-          <div  v-if="muqian>1">
-          <v-chip label >阁中帝子今何在？槛外长江空自流。</v-chip>
+          <v-chip v-if="muqian==2||muqian==3" label v-for="(item, index) in zhsdaansx[0][muqian]">{{index+1+(muqian-2)*10}}、{{znxjoskd[item[0].zqda]}}</v-chip>
+          <v-chip v-if="muqian==0||muqian==1" label v-for="(item, index) in zhsdaansx[0][muqian]">{{index+1+muqian*10}}、{{item[0].zqda}}</v-chip>
+          <div  v-if="muqian>3">
+          <v-chip label >{{zhsdaansx[0][4][muqian-4][0].zqda}}</v-chip>
             </br></br></br>
           </div>
             
               
                </div>
-               
+               <div v-if="muqian==2"></br></br></div>
         
         <v-subheader >批改</v-subheader>
        
     <v-layout row wrap>
-      <v-flex v-if="muqian<2" xs1 v-for="item in items">
+      <v-flex v-if="muqian<4" xs1 v-for="item in items">
           {{item}}
-        <v-checkbox color="#ad002d" indeterminate></v-checkbox>
+        <v-checkbox color="#ad002d"  v-model="selectedxsd[muqian]" :value="item"></v-checkbox>
 
       </v-flex>
-      <v-flex v-if="muqian>=2" xs12 sm8 offset-sm2>
+      <v-flex v-if="muqian>3" xs12 sm8 offset-sm2>
         </br>
           <v-text-field
+            v-model="selectedxsd[muqian]"
             counter="10"
             label="本题得分"
           ></v-text-field>
         </v-flex>
     </v-layout>
-
-        <v-flex xs12 sm4 offset-sm8>
+     
+        <v-flex xs12 sm4 offset-sm8 class="mt-2">
         <v-card-actions>
           
-          <v-btn flat color="#007f89">保存进度</v-btn>
           
-          <v-btn flat color="#181B39" @click="muqian<5?muqian+=1:muqian=5">{{muqian<5?"下一组":"完成阅卷"}}</v-btn>
+          <v-btn flat color="#181B39" @click="muqian!=0?muqian-=1:muqian=0">上一组</v-btn>
+          <v-btn flat color="#181B39" @click="cidue()">{{muqian!=7?"下一组":"完成阅卷"}}</v-btn>
         </v-card-actions>
             </v-flex>
           
@@ -211,6 +211,42 @@
   </div>
 </template>
 
+<template>
+  <div class="text-xs-center">
+    <v-dialog
+      v-model="dialogcd"
+      width="300"
+    >
+      
+
+      <v-card>
+        <v-card-title
+          class="headline grey lighten-2"
+          primary-title
+        >
+          成绩单
+        </v-card-title>
+
+        <v-card-text v-for="item in kaochang.zuoweib">
+          姓名：{{item.name}}   成绩：{{xsdf}}
+        </v-card-text>
+
+        <v-divider></v-divider>
+
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn
+            color="primary"
+            flat
+            @click="dialogcd = false"
+          >
+            I accept
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+  </div>
+</template>
     
   </v-layout>
 </template>
@@ -222,15 +258,17 @@ export default {
   name: 'file-listing-page',
   data() {
     return {
+      selectedxsd:[[1,2,3,4,5,6,7,8,9,10],[1,2,3,4,5,6,7,8,9,10],[1,2,3,4,5,6,7,8,9,10],[1,2,3,4,5,6,7,8,9,10]],
+      dialogcd:false,
+      znxjoskd:["A","B","C","D"],
       shifkaishiyj:false,
-      items:[1,2,3,4,5,6,7,8,9,10,11,12],
-      domotu:["https://s2.ax1x.com/2019/03/25/AthQjx.png",
-"https://s2.ax1x.com/2019/03/25/AthK3R.png",
+      items:[1,2,3,4,5,6,7,8,9,10],
+      domotu:["https://s2.ax1x.com/2019/03/25/AthK3R.png","https://s2.ax1x.com/2019/03/25/AthK3R.png","https://s2.ax1x.com/2019/03/25/AthQjx.png","https://s2.ax1x.com/2019/03/25/AthQjx.png",
 "https://s2.ax1x.com/2019/03/25/Athm4J.png",
 "https://s2.ax1x.com/2019/03/25/AtheN4.png",
 "https://s2.ax1x.com/2019/03/25/AthuC9.png",
 "https://s2.ax1x.com/2019/03/25/AthMg1.png"],
-      muqiant:["选择题","填空题","简答题1","简答题2","简答题3","简答题4"],
+      muqiant:["填空题(1-10)","填空题(11-20)","选择题(1-10)","选择题(11-20)","简答题1","简答题2","简答题3","简答题4"],
       muqiandan:"",
       muqian:0,
       ksyjxx:"开始阅卷",
@@ -246,7 +284,9 @@ export default {
       dialogxz:false,
       tableData: [],
       zwbzl:[],
-      tmzl:[]
+      tmzl:[],
+      zhsdaansx:[],
+      xsdf:0,
     }
   },created () {
       var shifyq=this.$db.read().get('servers').value()[0].yjqx
@@ -321,6 +361,57 @@ export default {
            zhendezhen.tmzl=body
            zhendezhen.dialogxz=true
      });
+    },sliceArray(array, size) {
+        
+    var result = [];
+    for (var x = 0; x < Math.ceil(array.length / size); x++) {
+        var start = x * size;
+        var end = start + size;
+        result.push(array.slice(start, end));
+    }
+    return result;
+} ,
+    kaishijuejuan(){
+
+      this.ksyjxx= this.ksyjxx=='开始阅卷'?'暂停阅卷':'开始阅卷'
+      var daanx=this.shijuan.daanbh
+      this.dengdai=true
+      this.dendaish="正在拉取答案信息..."
+      var zhenthis=this
+      var zhsdaan=[[],[]]
+      this.$http({
+          method: 'GET',
+          url: 'https://tfrtxk9h.api.lncld.net/1.1/classes/Tiku/5c95fdea12215f0072551fe5',
+          headers: {
+               "X-LC-Key": "v9KAOdcB6gaFH5nsTOgBgEds",
+               "X-LC-Id": "TfRTxk9HAm2hlkwORYJ6hrKt-gzGzoHsz",
+          }
+     }, function (err, res, body) {
+          var body=JSON.parse(body).tiku
+          for (var i=0;i<2;i++){
+              for (var x=0;x<daanx[i].length;x++){
+                zhsdaan[i].push(body.filter(function(elem,index,arr){
+    return elem.title==daanx[i][x]
+}) )
+
+          }
+    zhsdaan[i] = zhenthis.sliceArray(zhsdaan[i], 10);
+          }
+          zhenthis.zhsdaansx=zhsdaan
+          zhenthis.shifkaishiyj=!zhenthis.shifkaishiyj
+          zhenthis.dengdai=false
+
+     });
+      
+
+      
+    },cidue(){
+      if(this.muqian==7){
+      this.xsdf=this.selectedxsd[0].length+this.selectedxsd[1].length+this.selectedxsd[2].length*2+this.selectedxsd[3].length*2+parseInt(this.selectedxsd[4])+parseInt(this.selectedxsd[5])+parseInt(this.selectedxsd[6])+parseInt(this.selectedxsd[7])
+      this.dialogcd=true}
+      this.muqian!=7?this.muqian+=1:this.muqian=7
+      
+
     }
   }
 }  
