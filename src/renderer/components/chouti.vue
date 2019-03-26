@@ -60,7 +60,7 @@
 </v-flex>
     <v-flex xs12 sm9>
      
-
+        </br>
       <v-card v-if="shifkaishiyj">
         <v-toolbar flat color="translate">
       <v-list>
@@ -258,7 +258,7 @@ export default {
   name: 'file-listing-page',
   data() {
     return {
-      selectedxsd:[[1,2,3,4,5,6,7,8,9,10],[1,2,3,4,5,6,7,8,9,10],[1,2,3,4,5,6,7,8,9,10],[1,2,3,4,5,6,7,8,9,10]],
+      selectedxsd:[[1,2,3,4,5,6,7,8,9,10],[1,2,3,4,5,6,7,8,9,10],[1,2,3,4,5,6,7,8,9,10],[1,2,3,4,5,6,7,8,9,10],0,0,0,0],
       dialogcd:false,
       znxjoskd:["A","B","C","D"],
       shifkaishiyj:false,
