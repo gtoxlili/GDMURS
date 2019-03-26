@@ -26,7 +26,7 @@
           <v-subheader>考试信息</v-subheader>
           <v-text-field
             solo
-            v-model="shijuan"
+            v-model="shijuan.keyid"
             label="Message"
             append-icon="search"
             @click:append="xuanzekaos()"
@@ -37,14 +37,14 @@
           <v-text-field
             solo
             label="Message"
-            v-model="kaochang"
+            v-model="kaochang.objectId"
             append-icon="search"
             @click:append="xuanzekaoc()"
           ></v-text-field>
         </v-flex></br></br>
        <v-flex xs12 class="mt-2 ml-5">
         <v-btn class="mt-5" color="primary" dark @click="showFileDialog()">选择试卷</v-btn>
-        <v-btn class="mt-5" color="primary" dark @click="ksyjxx=ksyjxx=='开始阅卷'?'结束阅卷':'开始阅卷'">{{ksyjxx}}</v-btn>
+        <v-btn class="mt-5" color="primary" :disabled="shijuan==''||kaochang==''" dark @click="ksyjxx=ksyjxx=='开始阅卷'?'暂停阅卷':'开始阅卷',shifkaishiyj=!shifkaishiyj">{{ksyjxx}}</v-btn>
           
          </v-flex>
          </br></br></br>
@@ -61,7 +61,7 @@
     <v-flex xs12 sm9>
      
 
-      <v-card disabled>
+      <v-card v-if="shifkaishiyj">
         <v-toolbar flat color="translate">
       <v-list>
         <v-list-tile>
@@ -73,17 +73,18 @@
     </v-toolbar>
     </br>
     <v-flex xs12 sm10 offset-sm1>
+      <v-card-title primary-title>
+           <div>
+            <h3 class="headline mb-0">{{muqiant[muqian]}}</h3>
+            </div>
+          </v-card-title>
       <v-card>
         <v-img
           :src="domotu[muqian]"
           
         ></v-img>
       </v-card>
-        <v-card-title primary-title>
-           <div>
-            <h3 class="headline mb-0">{{muqiant[muqian]}}</h3>
-            </div>
-          </v-card-title>
+        
           
      
             <v-subheader >参考答案</v-subheader>
@@ -122,7 +123,7 @@
           
           <v-btn flat color="#007f89">保存进度</v-btn>
           
-          <v-btn flat color="#181B39" @click="muqian<5?muqian+=1:muqian=0">下一组</v-btn>
+          <v-btn flat color="#181B39" @click="muqian<5?muqian+=1:muqian=5">{{muqian<5?"下一组":"完成阅卷"}}</v-btn>
         </v-card-actions>
             </v-flex>
           
@@ -151,7 +152,7 @@
         <v-divider></v-divider>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="green darken-1" flat="flat" @click="shijuan=tmzl[dialogm1].keyid,dialogxz = false">选择</v-btn>
+          <v-btn color="green darken-1" flat="flat" @click="shijuan=tmzl[dialogm1],dialogxz = false">选择</v-btn>
           <v-btn color="green darken-1" flat="flat" @click="dialogxz = false">取消</v-btn>
         </v-card-actions>
         
@@ -176,7 +177,7 @@
         <v-divider></v-divider>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="green darken-1" flat="flat" @click="kaochang=zwbzl[dialogm2].objectId,dialogzx = false">选择</v-btn>
+          <v-btn color="green darken-1" flat="flat" @click="kaochang=zwbzl[dialogm2],dialogzx = false">选择</v-btn>
           <v-btn color="green darken-1" flat="flat" @click="dialogzx = false">取消</v-btn>
         </v-card-actions>
         
@@ -221,6 +222,7 @@ export default {
   name: 'file-listing-page',
   data() {
     return {
+      shifkaishiyj:false,
       items:[1,2,3,4,5,6,7,8,9,10,11,12],
       domotu:["https://s2.ax1x.com/2019/03/25/AthQjx.png",
 "https://s2.ax1x.com/2019/03/25/AthK3R.png",
@@ -240,7 +242,6 @@ export default {
       kaochang:"",
       dengdai:false,
       dendaish:"Please stand by",
-      isLoading: false,
       dialogzx:false,
       dialogxz:false,
       tableData: [],
@@ -257,31 +258,32 @@ export default {
       dialog.showOpenDialog({ properties: ['openDirectory'] }, (filename) => {
         if (filename.length === 1) {
           this.dictorySelected = filename[0]
+          console.log(this.dictorySelected)
           this.listingFile(this.dictorySelected)
         }
       })
     },
     listingFile(filepath) {
-      this.isLoading = true
+      
       const path = require('path')
       fs.readdir(filepath, (err, file) => {
         if (err) {
-          this.isLoading = false
+          
           return alert(err)
         }
         this.tableData = []
         for (let filename of file) {
           const stat = fs.statSync(path.join(filepath, filename))
           if (stat.isFile()) {
-            if (path.extname(filename).toLowerCase() === '.md') {
+            
               this.tableData.push({
                 filename: filename,
                 filesize: stat.size
               })
             }
-          }
+          
         }
-        this.isLoading = false
+        console.log(this.tableData)
       })
     },xuanzekaoc(){
           this.dengdai=true

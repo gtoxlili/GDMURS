@@ -562,14 +562,16 @@ var shijbf={"keyid":today.getFullYear().toString()+(today.getMonth().length==2?t
           xsidzhen.shaixuan("填")
           
           var daixhtk=xsidzhen.luanxu(xsidzhen.items)
-          for (var i=0;i<daixhtk.length;i++){
+          var xhci=daixhtk.length>20?20:daixhtk.length
+          for (var i=0;i<xhci;i++){
                   shijbf.daanbh[xsxsx].push(daixhtk[i].title)
                   daichuli[7]=daichuli[7]+`<p class=MsoNormal style='line-height:150%'><span lang=EN-US style='font-family:宋体'>`+(i+1)+`</span><span style='font-family:宋体'>、`+daixhtk[i].subtitle+`</span></p>`
           }
           xsidzhen.shaixuan("选")
           
           daixhtk=xsidzhen.luanxu(xsidzhen.items)
-          for (var i=0;i<daixhtk.length;i++){
+          xhci=daixhtk.length>20?20:daixhtk.length
+          for (var i=0;i<xhci;i++){
             shijbf.daanbh[xsxsx].push(daixhtk[i].title)
                   daichuli[8]=daichuli[8]+`<p class=MsoNormal style='line-height:150%'><span lang=EN-US style='line-height:
 150%;font-family:宋体;letter-spacing:.25pt'>(&nbsp;&nbsp; )`+(i+1)+`.</span><span
@@ -602,14 +604,7 @@ style='line-height:150%;font-family:宋体;letter-spacing:.25pt'>`+daixhtk[i].da
 宋体'>`+(i+1)+`</span><span style='font-family:宋体'>、`+daixhtk[i].subtitle+`（<span
 lang=EN-US>10</span>分）</span></p>
 
-<p style='margin:0cm;margin-bottom:.0001pt;layout-grid-mode:char'><span
-lang=EN-US style='font-size:10.5pt'>&nbsp;</span></p>
-
-<p style='margin:0cm;margin-bottom:.0001pt;layout-grid-mode:char'><span
-lang=EN-US style='font-size:10.5pt'>&nbsp;</span></p>
-
-<p style='margin:0cm;margin-bottom:.0001pt;layout-grid-mode:char'><span
-lang=EN-US style='font-size:10.5pt'>&nbsp;</span></p>`
+</br></br></br></br></br></br></br></br></br></br></br>`
           }
           
           fs.writeFileSync(remote.app.getPath("home")+"/tiku/shijuan/"+xsxsxsxs[xsxsx]+"卷.html", iconv.encode(daichuli.join(""), 'gbk'));

@@ -389,6 +389,7 @@
       gaimimas:["",""],
       snackbar:false,
       snackbartext:"",
+      dialogxwxf:false,
       show1: false,
       show2: false,
       show3: false,
