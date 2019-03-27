@@ -17,6 +17,7 @@
     "postinstall": ""
   },
   "build": {
+    "extraResources": ["./extraResources/**"],
     "productName": "广医自动试卷生成系统",
     "appId": "com.junian.gdmu",
     "directories": {

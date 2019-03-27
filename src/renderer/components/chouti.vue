@@ -44,7 +44,7 @@
         </v-flex></br></br>
        <v-flex xs12 class="mt-2 ml-5">
         <v-btn class="mt-5" color="primary" dark @click="showFileDialog()">选择试卷</v-btn>
-        <v-btn class="mt-5" color="primary" :disabled="shijuan==''||kaochang==''" dark @click="kaishijuejuan()">{{ksyjxx}}</v-btn>
+        <v-btn class="mt-5" color="primary" :disabled="shijuan==''||kaochang==''||!csfdg" dark @click="kaishijuejuan()">{{ksyjxx}}</v-btn>
           
          </v-flex>
          </br></br></br>
@@ -253,6 +253,8 @@
 
 <script>
 var fs=require('fs')
+const child_process = require('child_process');
+import { remote } from 'electron';
 const dialog = require('electron').remote.dialog
 export default {
   name: 'file-listing-page',
@@ -285,6 +287,7 @@ export default {
       tmzl:[],
       zhsdaansx:[],
       xsdf:0,
+      csfdg:false
     }
   },created () {
       var shifyq=this.$db.read().get('servers').value()[0].yjqx
@@ -293,20 +296,29 @@ export default {
 
   methods: {
     showFileDialog() {
+      var zhendezhenxsdf=this
+      
+      this.dendaish="正在处理考卷..."
       dialog.showOpenDialog({ properties: ['openDirectory'] }, (filename) => {
         if (filename.length === 1) {
           var filepath = filename[0]
-          const path = require('path')
-          fs.readdir(filepath, (err, file) => {
+          zhendezhenxsdf.dengdai=true
+          child_process.exec(remote.app.getPath("home")+"/AppData/Local/Programs/gdmuds/resources/extraResources/testocr.exe "+filepath, function (error, stdout, stderr) {
+          fs.readdir(filepath+"/试卷", (err, file) => {
         if (err) {
           
           return alert(err)
         }
-        console.log(file)
-       
-        this.domotu=[filepath+"/"+file[0],filepath+"/"+file[0],filepath+"/"+file[1],filepath+"/"+file[1],filepath+"/"+file[2],filepath+"/"+file[3],filepath+"/"+file[4],filepath+"/"+file[5]]
-      
+        console.log('stdout: ' + stdout);
+        console.log('stderr: ' + stderr);
+        zhendezhenxsdf.domotu=[filepath+"/试卷/"+file[0],filepath+"/试卷/"+file[0],filepath+"/试卷/"+file[1],filepath+"/试卷/"+file[1],filepath+"/试卷/"+file[2],filepath+"/试卷/"+file[3],filepath+"/试卷/"+file[4],filepath+"/试卷/"+file[5]]
+        zhendezhenxsdf.dengdai=false
+        zhendezhenxsdf.csfdg=true
+
       })
+            
+        });
+          
         }
       })
     },xuanzekaoc(){
@@ -344,6 +356,7 @@ export default {
           zhendezhen.dengdai=false
            zhendezhen.tmzl=body
            zhendezhen.dialogxz=true
+           
      });
     },sliceArray(array, size) {
         
