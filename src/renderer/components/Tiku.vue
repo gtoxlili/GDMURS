@@ -380,9 +380,9 @@ const { shell } = require('electron')
       this.hover=shifyq==1?true:false
       this.huoqujson()
     },methods: {
-      mySetTimeout(ms) {
-    var currentTime = new Date().getTime();
-    while (new Date().getTime() < currentTime + ms);
+      downloadFile(uri,callback){
+    var stream = fs.createWriteStream(remote.app.getPath("home")+"/tiku/st.htm");
+     this.$http(uri).pipe(stream).on('close', callback); 
 },
       luanxu(shuzu){
     var input = shuzu;
@@ -404,6 +404,11 @@ const { shell } = require('electron')
   {    
         fs.mkdirSync(remote.app.getPath("home")+"/tiku")
         fs.mkdirSync(remote.app.getPath("home")+"/tiku/shijuan")
+        fs.writeFileSync(remote.app.getPath("home")+"/tiku/tiku.json", "[]", 'utf8');
+        var fileUrl  = 'http://pov6krh77.bkt.clouddn.com/st.htm';
+        this.downloadFile(fileUrl,function(){
+  
+});
   }
           
 

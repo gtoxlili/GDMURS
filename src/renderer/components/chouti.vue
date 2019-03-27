@@ -275,14 +275,12 @@ export default {
       hover:true,
       dialogm1:0,
       dialogm2:0,
-      dictorySelected: '',
       shijuan:"",
       kaochang:"",
       dengdai:false,
       dendaish:"Please stand by",
       dialogzx:false,
       dialogxz:false,
-      tableData: [],
       zwbzl:[],
       tmzl:[],
       zhsdaansx:[],
@@ -297,33 +295,19 @@ export default {
     showFileDialog() {
       dialog.showOpenDialog({ properties: ['openDirectory'] }, (filename) => {
         if (filename.length === 1) {
-          this.dictorySelected = filename[0]
-          console.log(this.dictorySelected)
-          this.listingFile(this.dictorySelected)
-        }
-      })
-    },
-    listingFile(filepath) {
-      
-      const path = require('path')
-      fs.readdir(filepath, (err, file) => {
+          var filepath = filename[0]
+          const path = require('path')
+          fs.readdir(filepath, (err, file) => {
         if (err) {
           
           return alert(err)
         }
-        this.tableData = []
-        for (let filename of file) {
-          const stat = fs.statSync(path.join(filepath, filename))
-          if (stat.isFile()) {
-            
-              this.tableData.push({
-                filename: filename,
-                filesize: stat.size
-              })
-            }
-          
+        console.log(file)
+       
+        this.domotu=[filepath+"/"+file[0],filepath+"/"+file[0],filepath+"/"+file[1],filepath+"/"+file[1],filepath+"/"+file[2],filepath+"/"+file[3],filepath+"/"+file[4],filepath+"/"+file[5]]
+      
+      })
         }
-        console.log(this.tableData)
       })
     },xuanzekaoc(){
           this.dengdai=true
