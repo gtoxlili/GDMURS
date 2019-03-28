@@ -2,7 +2,7 @@
 dist/electron/*
 dist/web/*
 build/*
-!build/tiku
+!build/相关文件
 !build/icons
 node_modules/
 npm-debug.log

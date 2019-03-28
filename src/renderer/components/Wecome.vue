@@ -298,7 +298,7 @@
                   <v-text-field
             v-model="gaimimas[0]"
             :append-icon="show2 ? 'visibility' : 'visibility_off'"
-            :type="show1 ? 'text' : 'password'"
+            :type="show2 ? 'text' : 'password'"
             label="旧密码*"
             required
             counter
@@ -306,7 +306,7 @@
           ></v-text-field><v-text-field
             v-model="gaimimas[1]"
             :append-icon="show3 ? 'visibility' : 'visibility_off'"
-            :type="show1 ? 'text' : 'password'"
+            :type="show3 ? 'text' : 'password'"
             label="新密码*"
             required
             counter
@@ -586,20 +586,6 @@ console.log(truets.$db.read().get('servers').value())
                "X-LC-Id": "TfRTxk9HAm2hlkwORYJ6hrKt-gzGzoHsz",
           }
      }, function (err, res, body) {
-       this.$http({
-          method: 'DELETE',
-          url: 'https://tfrtxk9h.api.lncld.net/1.1/classes/Userws/'+daishancu.objectId,
-          headers: {
-               "X-LC-Key": "v9KAOdcB6gaFH5nsTOgBgEds",
-               "X-LC-Id": "TfRTxk9HAm2hlkwORYJ6hrKt-gzGzoHsz",
-          }
-     }, function (err, res, body) {
-          console.log(body)
-          xsthis.dengdai=false
-          xsthis.snackbar=true
-          xsthis.snackbartext="用户"+daishancu.xinmin+"，已删除。"
-          
-     });
           console.log(body)
           xsthis.dengdai=false
           xsthis.snackbar=true
