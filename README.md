@@ -2,6 +2,13 @@
 
 > 广东医科大学软设大赛作品
 
+## 网站模块
+
+- 个人信息
+- 改卷系统
+- 题库管理
+- 座位生成
+
 #### Build Setup
 
 ``` bash
@@ -29,3 +36,4 @@ This project was generated with [electron-vue](https://github.com/SimulatedGREG/
 ![Alt text](https://github.com/Glovecc/GDMURSDC/blob/master/static/1.png)
 ![Alt text](https://github.com/Glovecc/GDMURSDC/blob/master/static/2.png)
 ![Alt text](https://github.com/Glovecc/GDMURSDC/blob/master/static/3.png)
+![Alt text](https://github.com/Glovecc/GDMURSDC/blob/master/static/4.png)
